@@ -1,0 +1,69 @@
+- [x] 1. Data layer
+- [x] 1.1 Types + localStorage service
+  - Create `src/lib/types.ts` — Shortcut, Tag, StorageSchema
+  - Create `src/lib/storage.ts` — read/write/migrate (version check → blocking wall flag)
+  - _Requirements: REQ-18, REQ-19, REQ-20_
+- [x] 1.2 TanStack Query hooks
+  - Create `src/lib/hooks/useShortcuts.ts` — useQuery + useMutation (optimistic onMutate/onError/onSettled)
+  - _Requirements: REQ-9, REQ-11, REQ-12_
+- [x] 1.3 Key normalization + contrast utility
+  - Create `src/lib/keybind.ts` — keydown → canonical `Modifier+Key` string; conflict check
+  - Create `src/lib/contrast.ts` — thin `culori` wrapper; WCAG contrast ratio against white + dark
+  - Add `culori` to dependencies
+  - _Requirements: REQ-6, REQ-16_
+
+- [x] 2. Shell + routing scaffold
+- [x] 2.1 Root layout
+  - Modify `src/routes/__root.tsx` — aria-live region, Toaster, CommandPalette slot, StorageMigrationWall gate
+  - _Requirements: REQ-a11y-3, REQ-20_
+- [x] 2.2 Route files
+  - Create `src/routes/shortcuts/index.tsx`, `new.tsx`, `$id.tsx` (shells); run `vite build` to regenerate routeTree
+  - _Requirements: REQ-1, REQ-5, REQ-10_
+
+- [x] 3. Shortcut list (`/shortcuts`)
+- [x] 3.1 SearchBar + URL-synced validateSearch
+  - Modify `src/routes/shortcuts/index.tsx` — validateSearch schema (q, tags[])
+  - Create `src/components/shortcuts/SearchBar.tsx`
+  - _Requirements: REQ-1, REQ-17_
+- [x] 3.2 ShortcutCard + ShortcutGrid
+  - Create `src/components/shortcuts/ShortcutCard.tsx`, `ShortcutGrid.tsx`
+  - _Requirements: REQ-1, REQ-2, REQ-3, REQ-4, REQ-a11y-5_
+- [x] 3.3 FilterSidebar (sidebar / collapsible / sheet per breakpoint)
+  - Create `src/components/shortcuts/FilterSidebar.tsx`
+  - _Requirements: REQ-17, REQ-responsive-1, REQ-responsive-2, REQ-responsive-3_
+
+- [x] 4. Wizard (`/shortcuts/new`)
+- [x] 4.1 WizardStepper + Step1Form
+  - Create `src/components/shortcuts/wizard/WizardStepper.tsx`, `Step1Form.tsx`
+  - Step transitions on tablet/desktop only; no animation inside mobile sheet
+  - _Requirements: REQ-5, REQ-8, REQ-motion-1, REQ-a11y-1_
+- [x] 4.2 KeybindCapture + conflict detection
+  - Create `src/components/shortcuts/wizard/KeybindCapture.tsx`
+  - Uses `src/lib/keybind.ts`; conflict = overwrite or re-capture only
+  - _Requirements: REQ-6, REQ-7_
+- [x] 4.3 Step3Review + save mutation
+  - Create `src/components/shortcuts/wizard/Step3Review.tsx`
+  - _Requirements: REQ-9_
+
+- [x] 5. Detail route (`/shortcuts/$id`)
+- [x] 5.1 InlineEditor + dirty-state Save bar
+  - Create `src/components/shortcuts/InlineEditor.tsx`
+  - "Save changes" button appears when dirty; Escape triggers discard confirm
+  - _Requirements: REQ-10_
+- [x] 5.2 DeleteDialog + undo (immediate delete + re-insert)
+  - Create `src/components/shortcuts/DeleteDialog.tsx`
+  - _Requirements: REQ-11, REQ-a11y-4_
+
+- [x] 6. Command palette
+- [x] 6.1 Global CommandPalette (⌘K / Ctrl+K → clipboard copy)
+  - Create `src/components/shared/CommandPalette.tsx`
+  - Suppressed when alertdialog is open; copy + toast + updateLastUsed
+  - _Requirements: REQ-13, REQ-14, REQ-15, REQ-a11y-2, REQ-motion-1_
+
+- [x] 7. Tag color picker + migration wall
+- [x] 7.1 TagColorPicker with AA contrast validation
+  - Create `src/components/shortcuts/TagColorPicker.tsx` (Popover + culori contrast)
+  - _Requirements: REQ-16, REQ-a11y-5_
+- [x] 7.2 StorageMigrationWall
+  - Create `src/components/shared/StorageMigrationWall.tsx`
+  - _Requirements: REQ-20_

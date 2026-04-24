@@ -9,50 +9,133 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppRouteImport } from './routes/_app'
+import { Route as AppIndexRouteImport } from './routes/_app/index'
+import { Route as DevKitchenSinkRouteImport } from './routes/dev/kitchen-sink'
+import { Route as AppNewRouteImport } from './routes/_app/new'
+import { Route as AppIdRouteImport } from './routes/_app/$id'
 
-const IndexRoute = IndexRouteImport.update({
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const DevKitchenSinkRoute = DevKitchenSinkRouteImport.update({
+  id: '/dev/kitchen-sink',
+  path: '/dev/kitchen-sink',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AppNewRoute = AppNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppIdRoute = AppIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AppRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof AppIndexRoute
+  '/$id': typeof AppIdRoute
+  '/new': typeof AppNewRoute
+  '/dev/kitchen-sink': typeof DevKitchenSinkRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/$id': typeof AppIdRoute
+  '/new': typeof AppNewRoute
+  '/dev/kitchen-sink': typeof DevKitchenSinkRoute
+  '/': typeof AppIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_app': typeof AppRouteWithChildren
+  '/_app/$id': typeof AppIdRoute
+  '/_app/new': typeof AppNewRoute
+  '/dev/kitchen-sink': typeof DevKitchenSinkRoute
+  '/_app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/$id' | '/new' | '/dev/kitchen-sink'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/$id' | '/new' | '/dev/kitchen-sink' | '/'
+  id:
+    | '__root__'
+    | '/_app'
+    | '/_app/$id'
+    | '/_app/new'
+    | '/dev/kitchen-sink'
+    | '/_app/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
+  DevKitchenSinkRoute: typeof DevKitchenSinkRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app/': {
+      id: '/_app/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/dev/kitchen-sink': {
+      id: '/dev/kitchen-sink'
+      path: '/dev/kitchen-sink'
+      fullPath: '/dev/kitchen-sink'
+      preLoaderRoute: typeof DevKitchenSinkRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_app/new': {
+      id: '/_app/new'
+      path: '/new'
+      fullPath: '/new'
+      preLoaderRoute: typeof AppNewRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/$id': {
+      id: '/_app/$id'
+      path: '/$id'
+      fullPath: '/$id'
+      preLoaderRoute: typeof AppIdRouteImport
+      parentRoute: typeof AppRoute
     }
   }
 }
 
+interface AppRouteChildren {
+  AppIdRoute: typeof AppIdRoute
+  AppNewRoute: typeof AppNewRoute
+  AppIndexRoute: typeof AppIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppIdRoute: AppIdRoute,
+  AppNewRoute: AppNewRoute,
+  AppIndexRoute: AppIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
+  DevKitchenSinkRoute: DevKitchenSinkRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
