@@ -1,9 +1,8 @@
-import * as React from "react"
 import { Link } from "@tanstack/react-router"
 import { ShortcutCard } from "./ShortcutCard"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Button } from "@/components/ui/button"
-import type { Shortcut } from "@/lib/types"
+import type { AppSearch, Shortcut } from "@/lib/types"
 
 interface ShortcutGridProps {
   shortcuts: Shortcut[]
@@ -65,7 +64,7 @@ export function ShortcutGrid({ shortcuts, isLoading, isError, onRetry }: Shortcu
       <div className="flex flex-col items-center gap-3 py-16 text-center">
         <p className="text-[15px] text-muted-foreground">No shortcuts yet</p>
         <Button asChild className="min-h-[44px]">
-          <Link to="/new">Add your first shortcut</Link>
+          <Link to="/new" search={(prev) => prev as AppSearch}>Add your first shortcut</Link>
         </Button>
       </div>
     )

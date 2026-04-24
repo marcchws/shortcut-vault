@@ -8,11 +8,12 @@ import { ShortcutGrid } from "./ShortcutGrid"
 import { FilterSidebar } from "./FilterSidebar"
 import { SectionHeader } from "@/components/shared/SectionHeader"
 import { Button } from "@/components/ui/button"
-import type { Tag } from "@/lib/types"
+import type { AppSearch, Tag } from "@/lib/types"
 
 export function ShortcutListPage() {
   const { data: shortcuts = [], isLoading, isError, refetch } = useShortcuts()
-  const { q, tags: selectedTags } = useSearch({ from: "/_app" })
+  // strict: false — component always renders within /_app context
+  const { q, tags: selectedTags } = useSearch({ strict: false }) as AppSearch
 
   // Derive unique tags from all shortcuts
   const availableTags = React.useMemo<Tag[]>(() => {
@@ -60,7 +61,7 @@ export function ShortcutListPage() {
           title="Find your shortcut"
           action={
             <Button asChild className="min-h-[44px]">
-              <Link to="/new">
+              <Link to="/new" search={(prev) => prev as AppSearch}>
                 <PlusIcon strokeWidth={ICON_STROKE} className="size-4" />
                 Add shortcut
               </Link>

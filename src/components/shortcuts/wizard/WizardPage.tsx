@@ -17,7 +17,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet"
-import type { Tag } from "@/lib/types"
+import type { AppSearch, Tag } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
 type WizardStep = 1 | 2 | 3
@@ -67,7 +67,7 @@ function WizardContent({ noAnimation = false }: WizardContentProps) {
   }
 
   function handleCancel() {
-    navigate({ to: "/" })
+    navigate({ to: "/", search: (prev) => prev as AppSearch })
   }
 
   return (
@@ -142,11 +142,10 @@ function WizardContent({ noAnimation = false }: WizardContentProps) {
 
 export function WizardPage() {
   const navigate = useNavigate()
-  const [isMobile, setIsMobile] = React.useState(false)
+  const [isMobile, setIsMobile] = React.useState(() => window.matchMedia("(max-width: 767px)").matches)
 
   React.useEffect(() => {
     const mq = window.matchMedia("(max-width: 767px)")
-    setIsMobile(mq.matches)
     const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
     mq.addEventListener("change", handler)
     return () => mq.removeEventListener("change", handler)
@@ -155,11 +154,14 @@ export function WizardPage() {
   const [open, setOpen] = React.useState(false)
 
   // Mount with open=false so the Sheet/Dialog can animate in on first render
-  React.useEffect(() => { setOpen(true) }, [])
+  React.useEffect(() => {
+    const raf = requestAnimationFrame(() => setOpen(true))
+    return () => cancelAnimationFrame(raf)
+  }, [])
 
   function handleClose() {
     setOpen(false)
-    setTimeout(() => navigate({ to: "/" }), 200)
+    setTimeout(() => navigate({ to: "/", search: (prev) => prev as AppSearch }), 200)
   }
 
   if (isMobile) {

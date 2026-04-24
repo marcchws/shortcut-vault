@@ -3,6 +3,7 @@ import { useNavigate, useSearch } from "@tanstack/react-router"
 import { SlidersHorizontalIcon } from "lucide-react"
 import { ICON_STROKE } from "@/lib/icons"
 import { Button } from "@/components/ui/button"
+import type { AppSearch } from "@/lib/types"
 import {
   Accordion,
   AccordionContent,
@@ -93,8 +94,9 @@ export function FilterSidebar({
   tabletOnly,
   desktopOnly,
 }: FilterSidebarProps) {
-  const navigate = useNavigate({ from: "/_app" })
-  const { tags: selectedTags } = useSearch({ from: "/_app" })
+  const navigate = useNavigate()
+  // strict: false — component always renders within /_app context
+  const { tags: selectedTags } = useSearch({ strict: false }) as AppSearch
   const [mobileOpen, setMobileOpen] = React.useState(false)
 
   const activeCount = selectedTags.length
@@ -102,12 +104,15 @@ export function FilterSidebar({
   function handleToggle(label: string) {
     navigate({
       to: "/",
-      search: (prev) => ({
-        ...prev,
-        tags: prev.tags.includes(label)
-          ? prev.tags.filter((t) => t !== label)
-          : [...prev.tags, label],
-      }),
+      search: (rawPrev) => {
+        const prev = rawPrev as AppSearch
+        return {
+          ...prev,
+          tags: prev.tags.includes(label)
+            ? prev.tags.filter((t) => t !== label)
+            : [...prev.tags, label],
+        }
+      },
       replace: true,
       resetScroll: false,
     })
@@ -116,7 +121,7 @@ export function FilterSidebar({
   function handleClearAll() {
     navigate({
       to: "/",
-      search: (prev) => ({ ...prev, tags: [] }),
+      search: (rawPrev) => ({ ...(rawPrev as AppSearch), tags: [] }),
       replace: true,
       resetScroll: false,
     })

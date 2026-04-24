@@ -1,3 +1,5 @@
+export type AppSearch = { q: string; tags: string[] }
+
 export type Tag = {
   label: string
   /** Stored as `oklch(L C H)` string */

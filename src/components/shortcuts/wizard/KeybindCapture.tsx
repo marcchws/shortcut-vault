@@ -36,7 +36,7 @@ export function KeybindCapture({
 
   // Reset overwrite acknowledgement whenever a new key is captured
   React.useEffect(() => {
-    setOverwriteAcknowledged(false)
+    setOverwriteAcknowledged(false) // eslint-disable-line react-hooks/set-state-in-effect
     onOverwriteAcknowledged?.(false)
   }, [value]) // eslint-disable-line react-hooks/exhaustive-deps
 

@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createFileRoute } from "@tanstack/react-router"
 import * as React from "react"
 import { Button } from "@/components/ui/button"

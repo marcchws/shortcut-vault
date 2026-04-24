@@ -3,22 +3,23 @@ import { useNavigate, useSearch } from "@tanstack/react-router"
 import { SearchIcon } from "lucide-react"
 import { ICON_STROKE } from "@/lib/icons"
 import { cn } from "@/lib/utils"
+import type { AppSearch } from "@/lib/types"
 
 interface SearchBarProps {
   className?: string
 }
 
 export function SearchBar({ className }: SearchBarProps) {
-  const navigate = useNavigate({ from: "/_app" })
-  const { q } = useSearch({ from: "/_app" })
+  const navigate = useNavigate()
+  // strict: false — component always renders within /_app context
+  const { q } = useSearch({ strict: false }) as AppSearch
 
   const [localValue, setLocalValue] = React.useState(q)
   const debounceRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Sync localValue when URL q changes externally (e.g. back/forward)
-  React.useEffect(() => {
-    setLocalValue(q)
-  }, [q])
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  React.useEffect(() => { setLocalValue(q) }, [q])
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value
@@ -28,7 +29,7 @@ export function SearchBar({ className }: SearchBarProps) {
     debounceRef.current = setTimeout(() => {
       navigate({
         to: "/",
-        search: (prev) => ({ ...prev, q: value }),
+        search: (rawPrev) => ({ ...(rawPrev as AppSearch), q: value }),
         replace: true,
         resetScroll: false,
       })

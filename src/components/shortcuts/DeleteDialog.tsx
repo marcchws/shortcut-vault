@@ -1,4 +1,3 @@
-import * as React from "react"
 import { toast } from "sonner"
 import { useNavigate } from "@tanstack/react-router"
 import { useDeleteShortcut, useReInsertShortcut } from "@/lib/hooks/useShortcuts"
@@ -11,7 +10,7 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog"
-import type { Shortcut } from "@/lib/types"
+import type { AppSearch, Shortcut } from "@/lib/types"
 
 interface DeleteDialogProps {
   shortcut: Shortcut
@@ -61,7 +60,7 @@ export function DeleteDialog({ shortcut, open, onOpenChange }: DeleteDialogProps
                 const el = document.getElementById("a11y-announce")
                 if (el) el.textContent = `"${shortcut.name}" restored.`
                 toast.success(`"${shortcut.name}" restored`)
-                navigate({ to: "/$id", params: { id: shortcut.id } })
+                navigate({ to: "/$id", params: { id: shortcut.id }, search: (prev) => prev as AppSearch })
               } catch {
                 toast.error("Couldn't restore shortcut.")
               }
@@ -70,7 +69,7 @@ export function DeleteDialog({ shortcut, open, onOpenChange }: DeleteDialogProps
         }
       )
 
-      navigate({ to: "/" })
+      navigate({ to: "/", search: (prev) => prev as AppSearch })
     } catch {
       toast.error("Couldn't delete shortcut.")
     }
