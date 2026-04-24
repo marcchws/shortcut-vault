@@ -12,7 +12,7 @@ A client-side keyboard shortcut manager built for power users who navigate every
 - **Undo delete** — 5-second window to restore a deleted shortcut
 - **Dark / light mode** — persistent theme toggle
 - **Zero backend** — everything lives in `localStorage`, nothing leaves the browser
-- **[Kitchen sink](/dev/kitchen-sink)** — component showcase at `/dev/kitchen-sink`
+- **[Kitchen sink](https://shortcut-vault-sand.vercel.app/dev/kitchen-sink)** — component showcase at `/dev/kitchen-sink`
 
 ## Stack
 
