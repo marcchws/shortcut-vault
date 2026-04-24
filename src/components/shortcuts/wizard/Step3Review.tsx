@@ -5,7 +5,7 @@ import { useCreateShortcut, useDeleteShortcut } from "@/lib/hooks/useShortcuts"
 import { checkConflict } from "@/lib/keybind"
 import { checkContrast } from "@/lib/contrast"
 import { Button } from "@/components/ui/button"
-import type { Shortcut, Tag } from "@/lib/types"
+import type { AppSearch, Shortcut, Tag } from "@/lib/types"
 
 interface Step3ReviewProps {
   name: string
@@ -80,7 +80,7 @@ export function Step3Review({
       if (announceEl) announceEl.textContent = "Shortcut saved."
 
       toast.success("Shortcut saved")
-      navigate({ to: "/" })
+      navigate({ to: "/", search: (prev) => prev as AppSearch })
     } catch {
       const announceEl = document.getElementById("a11y-announce")
       if (announceEl) announceEl.textContent = "Save failed. Changes reverted."

@@ -37,13 +37,11 @@ export function TagColorPicker({ value, onChange, onRemove }: TagColorPickerProp
   const [contrastError, setContrastError] = React.useState<string | null>(null)
 
   // Sync inputs when value changes externally
-  React.useEffect(() => {
-    setLabelInput(value.label)
-  }, [value.label])
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  React.useEffect(() => { setLabelInput(value.label) }, [value.label])
 
-  React.useEffect(() => {
-    setPickerHex(oklchToHex(value.color))
-  }, [value.color])
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  React.useEffect(() => { setPickerHex(oklchToHex(value.color)) }, [value.color])
 
   function handlePickerChange(hex: string) {
     const oklchStr = hexToOklch(hex)

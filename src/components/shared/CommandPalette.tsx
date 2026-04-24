@@ -93,7 +93,7 @@ function PaletteContent({ shortcuts, onSelect }: PaletteContentProps) {
 
 export function CommandPalette() {
   const [open, setOpen] = React.useState(false)
-  const [isMobile, setIsMobile] = React.useState(false)
+  const [isMobile, setIsMobile] = React.useState(() => window.matchMedia("(max-width: 767px)").matches)
   const { data: shortcuts = [] } = useShortcuts()
   const updateLastUsed = useUpdateLastUsed()
   const previousFocusRef = React.useRef<Element | null>(null)
@@ -101,7 +101,6 @@ export function CommandPalette() {
   // Detect mobile
   React.useEffect(() => {
     const mq = window.matchMedia("(max-width: 767px)")
-    setIsMobile(mq.matches)
     const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
     mq.addEventListener("change", handler)
     return () => mq.removeEventListener("change", handler)

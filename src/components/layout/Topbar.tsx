@@ -2,6 +2,7 @@ import * as React from "react"
 import { Link, useMatch } from "@tanstack/react-router"
 import { cn } from "@/lib/utils"
 import { SearchBar } from "@/components/shortcuts/SearchBar"
+import type { AppSearch } from "@/lib/types"
 
 /**
  * Topbar — fixed top nav with scroll morph to floating pill.
@@ -64,6 +65,7 @@ export function Topbar() {
         {/* Logo */}
         <Link
           to="/"
+          search={(prev) => prev as AppSearch}
           className="font-display text-[15px] font-extrabold leading-none tracking-[-0.02em] text-foreground no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-full px-1"
           aria-label="Shortcut Vault home"
         >

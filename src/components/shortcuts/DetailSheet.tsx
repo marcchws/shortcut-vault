@@ -1,6 +1,7 @@
 import * as React from "react"
 import { useNavigate } from "@tanstack/react-router"
 import { useShortcuts } from "@/lib/hooks/useShortcuts"
+import type { AppSearch } from "@/lib/types"
 import { InlineEditor } from "./InlineEditor"
 import { DeleteDialog } from "./DeleteDialog"
 import { Button } from "@/components/ui/button"
@@ -25,11 +26,14 @@ export function DetailSheet({ id }: DetailSheetProps) {
   const shortcut = shortcuts.find((s) => s.id === id)
 
   // Mount with open=false so the Sheet can animate in on first render
-  React.useEffect(() => { setOpen(true) }, [])
+  React.useEffect(() => {
+    const raf = requestAnimationFrame(() => setOpen(true))
+    return () => cancelAnimationFrame(raf)
+  }, [])
 
   function handleClose() {
     setOpen(false)
-    setTimeout(() => navigate({ to: "/" }), 200)
+    setTimeout(() => navigate({ to: "/", search: (prev) => prev as AppSearch }), 200)
   }
 
   return (

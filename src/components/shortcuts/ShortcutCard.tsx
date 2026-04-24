@@ -1,8 +1,7 @@
-import * as React from "react"
 import { Link } from "@tanstack/react-router"
 import { Card, CardContent } from "@/components/ui/card"
 import { checkContrast } from "@/lib/contrast"
-import type { Shortcut } from "@/lib/types"
+import type { AppSearch, Shortcut } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
 interface ShortcutCardProps {
@@ -56,6 +55,7 @@ export function ShortcutCard({ shortcut, className }: ShortcutCardProps) {
     <Link
       to="/$id"
       params={{ id: shortcut.id }}
+      search={(prev) => prev as AppSearch}
       className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-[14px]"
     >
       <Card
