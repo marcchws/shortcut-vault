@@ -43,8 +43,6 @@ export const Route = createFileRoute("/dev/kitchen-sink")({
 })
 
 function KitchenSinkPage() {
-  if (!import.meta.env.DEV) return null
-
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="mx-auto max-w-4xl px-6 py-10">
